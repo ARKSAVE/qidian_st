@@ -4,16 +4,19 @@ from bs4 import BeautifulSoup
 
 
 class Post:
-    def __init__(self, url, headers):
+    def __init__(self, url):
         # 初始化函数，设置URL和请求头
+        # 传入的url为默认链接
         self.url = url
-        self.headers = headers
+        self.headers = {
+            "User-Agent": "'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            'Cookie': '_csrfToken=KSL3VB0H2HleHLgMWIg2WaDYlfsw3qMHzgeGhVcW; newstatisticUUID=1741675216_1543749232; fu=1965005967; _ga=GA1.1.2081863218.1741675215; supportwebp=true; traffic_utm_referer=https%3A//cn.bing.com/; e1=%7B%22l6%22%3A%22%22%2C%22l7%22%3A%22%22%2C%22l1%22%3A3%2C%22l3%22%3A%22%22%2C%22pid%22%3A%22qd_p_qidian%22%2C%22eid%22%3A%22qd_A72%22%7D; e2=%7B%22l6%22%3A%22%22%2C%22l7%22%3A%22%22%2C%22l1%22%3A3%2C%22l3%22%3A%22%22%2C%22pid%22%3A%22qd_p_qidian%22%2C%22eid%22%3A%22qd_A71%22%7D; _ga_FZMMH98S83=GS1.1.1741675215.1.1.1741675975.0.0.0; _ga_PFYW0QLV3P=GS1.1.1741675215.1.1.1741675975.0.0.0; x-waf-captcha-referer=; w_tsfp=ltv2UU8E3ewC6mwF46vukEqoET0ufDohkgpsXqNmeJ94Q7ErU5mB0IB9u8L+MnDY4Mxnt9jMsoszd3qAUdIkexYRTMWTdo4TkB/Gy99yicxUQ0k5VYnWSwVNJb115WJEdWsPLBG332YoJIISzLVj2VFesncgmPskXvFqL5kXjB0ZufzCkpxuDW3HlFWQRzaZciVfKr/c9OtwraxQ9z/c5Vv7LFt0A6hewgfHg31dWzox6wOpaPsYd0W/Kdz3HKlw7ibwsyz1HIWur1Fkpk526UpkU4vqimqXOnQyNQgdJgf3wO1xbq3fa4l//GxZTrBdGgFA+lRa8L8r81YZDCnoNHWLU6h+swIHEPZQ+M/4LCvE1MnrJ10P7N54xEl6'
+        }
 
     def is_url(self, url):
         # 检查传入的字符串是否为有效的URL
         if type(url) == str:
             zc = re.match(r'https?://[\w\-\.]+\.(com|cn)([/\w\-?=&%]*)?', url)
-            print(zc)
             return zc
         else:
             print("is_url函数否")
@@ -30,7 +33,7 @@ class Post:
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup
 
-    def post(self, data):
+    def post_(self, data):
         # 根据传入的数据发送HTTP请求
         url = self.url
         headers = self.headers
@@ -54,7 +57,7 @@ class Post:
             "headers": headers,
             "cookie": cookie
         }
-        print(self.__post(body))
+        return self.__post(body)
 
     def repair_url(self, url):
         # 修复不完整的URL
@@ -82,27 +85,3 @@ class Post:
             print("url_have_http函数否")
             return False
 
-    def find_book_name(self):
-        # 根据用户输入的书名生成URL并发送请求
-        url = "https://www.qidian.com/so/"
-        name = input("请输入书名：")
-        url = f'{url}{name}.html'
-        self.post(url)
-
-    def get_find_book_list(self, soup):
-        # 从解析的HTML中提取书籍列表
-        book_ul = soup.find_all("ul", class_="book-img-text")
-        book_list = book_ul.find_all("li")
-
-
-if __name__ == '__main__':
-    headers = {
-        "User-Agent": "'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        'Cookie': '_csrfToken=KSL3VB0H2HleHLgMWIg2WaDYlfsw3qMHzgeGhVcW; newstatisticUUID=1741675216_1543749232; fu=1965005967; _ga=GA1.1.2081863218.1741675215; supportwebp=true; traffic_utm_referer=https%3A//cn.bing.com/; e1=%7B%22l6%22%3A%22%22%2C%22l7%22%3A%22%22%2C%22l1%22%3A3%2C%22l3%22%3A%22%22%2C%22pid%22%3A%22qd_p_qidian%22%2C%22eid%22%3A%22qd_A72%22%7D; e2=%7B%22l6%22%3A%22%22%2C%22l7%22%3A%22%22%2C%22l1%22%3A3%2C%22l3%22%3A%22%22%2C%22pid%22%3A%22qd_p_qidian%22%2C%22eid%22%3A%22qd_A71%22%7D; _ga_FZMMH98S83=GS1.1.1741675215.1.1.1741675975.0.0.0; _ga_PFYW0QLV3P=GS1.1.1741675215.1.1.1741675975.0.0.0; x-waf-captcha-referer=; w_tsfp=ltv2UU8E3ewC6mwF46vukEqoET0ufDohkgpsXqNmeJ94Q7ErU5mB0IB9u8L+MnDY4Mxnt9jMsoszd3qAUdIkexYRTMWTdo4TkB/Gy99yicxUQ0k5VYnWSwVNJb115WJEdWsPLBG332YoJIISzLVj2VFesncgmPskXvFqL5kXjB0ZufzCkpxuDW3HlFWQRzaZciVfKr/c9OtwraxQ9z/c5Vv7LFt0A6hewgfHg31dWzox6wOpaPsYd0W/Kdz3HKlw7ibwsyz1HIWur1Fkpk526UpkU4vqimqXOnQyNQgdJgf3wO1xbq3fa4l//GxZTrBdGgFA+lRa8L8r81YZDCnoNHWLU6h+swIHEPZQ+M/4LCvE1MnrJ10P7N54xEl6'
-    }
-    url = 'https://www.qidian.com/'
-    post = Post(url, headers)
-    a = {
-        "url": "https://www.qidian.com/qihuan/",
-    }
-    post.find_book_name()
