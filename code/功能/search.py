@@ -80,6 +80,7 @@ class Search:
             ji_num += 1
             chapter_num = 0
             all_li = catalog_item.find_all('li')
+            chapter_list[ji_num] = {}
             for li in all_li:
                 chapter_num += 1
                 chapter_url = li.find('a',class_='chapter-name')['href']
