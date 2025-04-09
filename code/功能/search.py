@@ -86,7 +86,7 @@ class Search:
                 chapter_name = li.find('a',class_='chapter-name').get_text()
                 chapter_list[ji_num][chapter_num] = {
                     "chapter_name": chapter_name,
-                    "chapter_url": chapter_url,
+                    "chapter_url": "https:"+chapter_url,
                 }
                 print(chapter_num, ":", chapter_name)
 
@@ -127,9 +127,9 @@ class Search:
     def __is_num(self, text):
         num = "1234567890"
         for char in text:
-            if char in num:
-                return True
-            return False
+            if char not in num:
+                return False
+        return True
 
     def read_json(self, file_name):
         with open(file_name, 'r', encoding='utf-8') as f:
