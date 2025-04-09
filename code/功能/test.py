@@ -21,12 +21,16 @@ def is_path(path):
 
 def __mk_path( path):
     if '/' in path:
-        path_i = path.split('/')
+        if path[-1:] == '/':
+            path_i = path[:-1].split('/')
+        else:
+            path_i = path.split('/')
         path1 =''
         path_long = len(path_i)
-        if path[:-1] == '/':
+        if path[-1:] == '/':
             for i in path_i:
                 path1 += i + '/'
+                os.mkdir(path1)
             print(path1)
         else:
             a = 0
@@ -34,7 +38,7 @@ def __mk_path( path):
                 path1 += i
                 print(path1)
                 a+=1
-                if a == path_long-1:
+                if a == path_long:
                     if not os.path.isdir(path1):
                         with open(path1, 'w', encoding='utf-8') as f:
                             f.write('')
@@ -44,11 +48,16 @@ def __mk_path( path):
                     path1 +=  '/'
                     if not os.path.isdir(path1):
                         os.mkdir(path1)
+    else:
+        if os.path.isdir(path) and os.path.isfile(path):
+            print(path, "已存在")
+        else:
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write('')
 
 
 
-
-__mk_path(".test/test/")
+__mk_path(".test")
 # if None:
 #     print(True)
 # else:
