@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 import post_url
 
@@ -114,6 +115,7 @@ class Search:
                     if chapter_num > next_ji > 0:   #判断输入的章数是否合法（大于0，小于总章数）
                         #打开章节
                         print("打开章节")
+                        self.get_book_content(chapter_list,ji_num,next_ji)
                         return
                     else:
                         print(next_ji <chapter_num)
@@ -123,7 +125,12 @@ class Search:
 
 
 
-
+    def get_book_content(self,chapter_list,ji,num):
+        url = chapter_list[ji][num]["chapter_url"]
+        soup = self.post.post_(url)
+        book_info = soup.find('script', type='application/json').get_text()
+        json_data = json.loads(book_info)
+        print(re.sub(r"<p>", "\n", json_data['pageContext']['pageProps']['pageData']['chapterInfo']['content']))
 
     def __is_num(self, text):
         num = "1234567890"
